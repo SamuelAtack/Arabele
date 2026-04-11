@@ -1,2 +1,2 @@
-# assemble
+# Assemble
 ballet daily game
