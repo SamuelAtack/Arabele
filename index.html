@@ -149,16 +149,15 @@
       border-radius: 12px;
       padding: 32px 36px;
       border: none;
-      background: rgba(255,255,255,0.55);
+      background: rgba(255,255,255,0.75);
       min-height: 150px;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      backdrop-filter: blur(2px);
     }
-    .clue-card.active-card { background: rgba(255,255,255,0.65); border-left: 3px solid var(--teal); }
-    .clue-card.wrong-card { background: rgba(243,220,228,0.6); }
-    .clue-card.past-card { background: rgba(255,255,255,0.4); }
+    .clue-card.active-card { background: rgba(255,255,255,0.82); border-left: 3px solid var(--teal); }
+    .clue-card.wrong-card { background: rgba(243,220,228,0.80); }
+    .clue-card.past-card { background: rgba(255,255,255,0.65); }
 
     .clue-tag {
       display: inline-block;
@@ -224,7 +223,7 @@
       font-family: var(--serif);
       font-size: 15px;
       font-weight: 300;
-      background: rgba(255,255,255,0.7);
+      background: rgba(255,255,255,0.82);
       color: var(--ink);
       outline: none;
       transition: border-color 0.2s;
@@ -286,8 +285,8 @@
       text-align: center;
       margin-top: 4px;
     }
-    .result-banner.win { background: rgba(224,245,238,0.7); }
-    .result-banner.lose { background: rgba(243,220,228,0.6); }
+    .result-banner.win { background: rgba(224,245,238,0.88); }
+    .result-banner.lose { background: rgba(243,220,228,0.85); }
     .rb-label { font-size: 10px; letter-spacing: 0.2em; font-family: var(--sc); font-weight: 300; margin-bottom: 8px; }
     .result-banner.win .rb-label { color: var(--jade); }
     .result-banner.lose .rb-label { color: var(--rose-d); }
@@ -338,52 +337,74 @@
 
 <svg class="bg-canvas" viewBox="0 0 1440 900" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
 
-  <!-- Left curtain drape -->
-  <path d="M0,0 C60,80 20,200 80,300 C120,370 60,450 100,560 C130,640 70,720 110,900 L0,900 Z" fill="#c0392b" opacity="0.06"/>
-  <path d="M0,0 C90,120 40,260 110,380 C150,450 90,540 130,650 C160,720 100,810 140,900 L0,900 Z" fill="#c0392b" opacity="0.04"/>
-  <path d="M0,0 L50,0 C100,100 55,230 115,350 C148,415 100,510 138,620 C162,690 118,790 155,900 L0,900 Z" fill="#922b21" opacity="0.05"/>
+  <!-- Stage back wall - warm wash -->
+  <rect x="0" y="0" width="1440" height="900" fill="#f5ece6" opacity="0.6"/>
 
-  <!-- Right curtain drape -->
-  <path d="M1440,0 C1380,80 1420,200 1360,300 C1320,370 1380,450 1340,560 C1310,640 1370,720 1330,900 L1440,900 Z" fill="#c0392b" opacity="0.06"/>
-  <path d="M1440,0 C1350,120 1400,260 1330,380 C1290,450 1350,540 1310,650 C1280,720 1340,810 1300,900 L1440,900 Z" fill="#c0392b" opacity="0.04"/>
-  <path d="M1440,0 L1390,0 C1340,100 1385,230 1325,350 C1292,415 1340,510 1302,620 C1278,690 1322,790 1285,900 L1440,900 Z" fill="#922b21" opacity="0.05"/>
+  <!-- Stage floor - warm wood tone, perspective trapezoid -->
+  <path d="M0,620 L1440,620 L1440,900 L0,900 Z" fill="#c9a87a" opacity="0.13"/>
+  <path d="M0,640 L1440,640 L1440,900 L0,900 Z" fill="#b8956a" opacity="0.08"/>
+  <!-- Floor plank lines -->
+  <line x1="0" y1="660" x2="1440" y2="660" stroke="#9a7a52" stroke-width="0.8" opacity="0.08"/>
+  <line x1="0" y1="695" x2="1440" y2="695" stroke="#9a7a52" stroke-width="0.8" opacity="0.07"/>
+  <line x1="0" y1="730" x2="1440" y2="730" stroke="#9a7a52" stroke-width="0.8" opacity="0.06"/>
+  <line x1="0" y1="770" x2="1440" y2="770" stroke="#9a7a52" stroke-width="0.8" opacity="0.06"/>
+  <line x1="0" y1="815" x2="1440" y2="815" stroke="#9a7a52" stroke-width="0.8" opacity="0.05"/>
+  <line x1="0" y1="865" x2="1440" y2="865" stroke="#9a7a52" stroke-width="0.8" opacity="0.05"/>
 
-  <!-- Curtain top rod -->
-  <rect x="0" y="0" width="200" height="18" rx="0" fill="#922b21" opacity="0.07"/>
-  <rect x="1240" y="0" width="200" height="18" rx="0" fill="#922b21" opacity="0.07"/>
+  <!-- Stage edge / lip -->
+  <rect x="0" y="618" width="1440" height="6" fill="#8a6a40" opacity="0.14"/>
 
-  <!-- Ballet shoe left - abstract elongated oval + ribbon -->
-  <ellipse cx="180" cy="720" rx="90" ry="28" fill="#e8c4b0" opacity="0.13" transform="rotate(-18,180,720)"/>
-  <ellipse cx="148" cy="705" rx="22" ry="18" fill="#dba898" opacity="0.1" transform="rotate(-18,148,705)"/>
-  <!-- ribbon -->
-  <path d="M170,695 Q140,660 155,640 Q168,655 162,678" fill="none" stroke="#dba898" stroke-width="3" opacity="0.12"/>
-  <path d="M178,692 Q210,658 198,636 Q184,652 188,676" fill="none" stroke="#dba898" stroke-width="3" opacity="0.12"/>
+  <!-- Proscenium arch top - the frame above the stage -->
+  <rect x="0" y="0" width="1440" height="80" fill="#7a2020" opacity="0.10"/>
+  <rect x="0" y="74" width="1440" height="8" fill="#5a1515" opacity="0.12"/>
 
-  <!-- Ballet shoe right -->
-  <ellipse cx="1280" cy="680" rx="90" ry="28" fill="#e8c4b0" opacity="0.13" transform="rotate(15,1280,680)"/>
-  <ellipse cx="1312" cy="664" rx="22" ry="18" fill="#dba898" opacity="0.1" transform="rotate(15,1312,664)"/>
-  <path d="M1290,655 Q1260,620 1275,600 Q1288,615 1282,638" fill="none" stroke="#dba898" stroke-width="3" opacity="0.12"/>
-  <path d="M1298,652 Q1330,618 1318,596 Q1304,612 1308,636" fill="none" stroke="#dba898" stroke-width="3" opacity="0.12"/>
+  <!-- Left curtain - thick, draped, rich red -->
+  <path d="M0,0 L220,0 C190,60 210,130 180,200 C160,260 195,320 170,400 C150,460 178,520 155,600 C138,650 160,700 140,760 L0,760 Z" fill="#9b2020" opacity="0.22"/>
+  <path d="M0,0 L170,0 C148,55 165,125 140,195 C122,255 148,315 125,395 C108,452 132,512 110,592 C95,642 115,692 98,752 L0,752 Z" fill="#c0392b" opacity="0.18"/>
+  <path d="M0,0 L110,0 C95,50 108,118 88,188 C74,244 94,302 76,380 C62,434 78,492 62,568 C50,616 64,664 50,722 L0,722 Z" fill="#e74c3c" opacity="0.10"/>
+  <!-- curtain fold highlights -->
+  <path d="M60,0 C52,60 68,130 50,200 C38,255 55,315 40,390" fill="none" stroke="#f1948a" stroke-width="2" opacity="0.12"/>
+  <path d="M120,0 C108,58 122,126 104,196 C90,252 108,310 90,385" fill="none" stroke="#f1948a" stroke-width="1.5" opacity="0.09"/>
 
-  <!-- Tutu silhouette - centre top, very faint -->
-  <ellipse cx="720" cy="60" rx="160" ry="38" fill="#f3dce4" opacity="0.18"/>
-  <ellipse cx="720" cy="62" rx="130" ry="30" fill="#f3dce4" opacity="0.10"/>
-  <!-- bodice -->
-  <rect x="700" y="24" width="40" height="38" rx="8" fill="#f3dce4" opacity="0.14"/>
+  <!-- Right curtain -->
+  <path d="M1440,0 L1220,0 C1250,60 1230,130 1260,200 C1280,260 1245,320 1270,400 C1290,460 1262,520 1285,600 C1302,650 1280,700 1300,760 L1440,760 Z" fill="#9b2020" opacity="0.22"/>
+  <path d="M1440,0 L1270,0 C1292,55 1275,125 1300,195 C1318,255 1292,315 1315,395 C1332,452 1308,512 1330,592 C1345,642 1325,692 1342,752 L1440,752 Z" fill="#c0392b" opacity="0.18"/>
+  <path d="M1440,0 L1330,0 C1345,50 1332,118 1352,188 C1366,244 1346,302 1364,380 C1378,434 1362,492 1378,568 C1390,616 1376,664 1390,722 L1440,722 Z" fill="#e74c3c" opacity="0.10"/>
+  <path d="M1380,0 C1388,60 1372,130 1390,200 C1402,255 1385,315 1400,390" fill="none" stroke="#f1948a" stroke-width="2" opacity="0.12"/>
+  <path d="M1320,0 C1332,58 1318,126 1336,196 C1350,252 1332,310 1350,385" fill="none" stroke="#f1948a" stroke-width="1.5" opacity="0.09"/>
 
-  <!-- Tutu bottom left faint -->
-  <ellipse cx="120" cy="180" rx="80" ry="20" fill="#f3dce4" opacity="0.09" transform="rotate(-12,120,180)"/>
+  <!-- Curtain pelmet / valance swag top left -->
+  <path d="M0,0 L0,90 Q55,120 110,80 Q165,42 220,82 L220,0 Z" fill="#7a1515" opacity="0.18"/>
+  <path d="M0,0 L0,75 Q55,100 110,64 Q165,28 220,66 L220,0 Z" fill="#c0392b" opacity="0.12"/>
 
-  <!-- Stage floor line suggestion -->
-  <line x1="0" y1="870" x2="1440" y2="870" stroke="#c0392b" stroke-width="1" opacity="0.05"/>
+  <!-- Curtain pelmet top right -->
+  <path d="M1440,0 L1440,90 Q1385,120 1330,80 Q1275,42 1220,82 L1220,0 Z" fill="#7a1515" opacity="0.18"/>
+  <path d="M1440,0 L1440,75 Q1385,100 1330,64 Q1275,28 1220,66 L1220,0 Z" fill="#c0392b" opacity="0.12"/>
 
-  <!-- Scattered small diamonds / sparkles -->
-  <rect x="320" y="80" width="10" height="10" rx="1" fill="#1D9E75" opacity="0.08" transform="rotate(45,325,85)"/>
-  <rect x="1100" y="120" width="8" height="8" rx="1" fill="#1D9E75" opacity="0.07" transform="rotate(45,1104,124)"/>
-  <rect x="200" y="400" width="7" height="7" rx="1" fill="#c0392b" opacity="0.07" transform="rotate(45,203,403)"/>
-  <rect x="1250" y="350" width="9" height="9" rx="1" fill="#c0392b" opacity="0.06" transform="rotate(45,1254,354)"/>
-  <rect x="680" y="820" width="8" height="8" rx="1" fill="#1D9E75" opacity="0.07" transform="rotate(45,684,824)"/>
-  <rect x="760" y="820" width="6" height="6" rx="1" fill="#c0392b" opacity="0.06" transform="rotate(45,763,823)"/>
+  <!-- Stage spotlight pools - soft circles of warm light on stage area -->
+  <ellipse cx="500" cy="580" rx="180" ry="40" fill="#fff8e8" opacity="0.18"/>
+  <ellipse cx="940" cy="560" rx="160" ry="36" fill="#fff8e8" opacity="0.15"/>
+  <ellipse cx="720" cy="540" rx="120" ry="28" fill="#fff8e8" opacity="0.12"/>
+
+  <!-- Ballet shoe pair - bottom left, on stage floor -->
+  <ellipse cx="230" cy="660" rx="72" ry="20" fill="#e8c4b0" opacity="0.22" transform="rotate(-12,230,660)"/>
+  <ellipse cx="206" cy="648" rx="18" ry="14" fill="#dba898" opacity="0.18" transform="rotate(-12,206,648)"/>
+  <path d="M218,642 Q192,612 205,594 Q216,607 212,628" fill="none" stroke="#c9a090" stroke-width="2.5" opacity="0.2"/>
+  <path d="M224,640 Q250,610 240,592 Q228,606 230,628" fill="none" stroke="#c9a090" stroke-width="2.5" opacity="0.2"/>
+
+  <!-- Ballet shoe pair - bottom right -->
+  <ellipse cx="1220" cy="648" rx="72" ry="20" fill="#e8c4b0" opacity="0.22" transform="rotate(10,1220,648)"/>
+  <ellipse cx="1246" cy="636" rx="18" ry="14" fill="#dba898" opacity="0.18" transform="rotate(10,1246,636)"/>
+  <path d="M1232,630 Q1206,600 1219,582 Q1230,595 1226,616" fill="none" stroke="#c9a090" stroke-width="2.5" opacity="0.2"/>
+  <path d="M1238,628 Q1264,598 1254,580 Q1242,594 1244,616" fill="none" stroke="#c9a090" stroke-width="2.5" opacity="0.2"/>
+
+  <!-- Scattered sparkle diamonds -->
+  <rect x="310" y="110" width="9" height="9" fill="#1D9E75" opacity="0.12" transform="rotate(45,314,114)"/>
+  <rect x="1110" y="130" width="8" height="8" fill="#1D9E75" opacity="0.10" transform="rotate(45,1114,134)"/>
+  <rect x="240" y="320" width="7" height="7" fill="#c0392b" opacity="0.10" transform="rotate(45,243,323)"/>
+  <rect x="1200" y="300" width="8" height="8" fill="#c0392b" opacity="0.09" transform="rotate(45,1204,304)"/>
+  <rect x="700" y="780" width="7" height="7" fill="#1D9E75" opacity="0.10" transform="rotate(45,703,783)"/>
+  <rect x="740" y="790" width="5" height="5" fill="#c0392b" opacity="0.09" transform="rotate(45,742,792)"/>
 
 </svg>
 
