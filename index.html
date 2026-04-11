@@ -55,22 +55,22 @@
     }
 
     .app {
-      background: rgba(250,247,244,0.92);
-      border-radius: 20px;
-      border: 0.5px solid var(--border);
-      overflow: hidden;
+      background: transparent;
+      border-radius: 0;
+      border: none;
+      overflow: visible;
       color: var(--ink);
       width: 100%;
       max-width: 780px;
-      box-shadow: 0 2px 32px rgba(44,44,42,0.07);
+      box-shadow: none;
       position: relative;
       z-index: 1;
     }
 
     .header {
-      background: #fff;
-      border-bottom: 0.5px solid var(--border);
-      padding: 20px 24px 16px;
+      background: transparent;
+      border-bottom: none;
+      padding: 20px 24px 20px;
       text-align: center;
       position: relative;
     }
@@ -103,7 +103,8 @@
     .mode-tabs {
       display: flex;
       border-bottom: 0.5px solid var(--border);
-      background: #fff;
+      background: transparent;
+      margin-bottom: 8px;
     }
     .mode-tab {
       flex: 1;
@@ -121,19 +122,19 @@
     }
     .mode-tab.active { color: var(--teal); border-bottom-color: var(--teal); }
 
-    .main { padding: 28px 32px 40px; }
+    .main { padding: 28px 8px 40px; }
 
     .step-indicators {
       display: flex;
       gap: 5px;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
       justify-content: center;
     }
     .step-dot {
       width: 28px;
       height: 4px;
       border-radius: 2px;
-      background: #e8e5e0;
+      background: rgba(44,44,42,0.12);
       transition: all 0.3s;
     }
     .step-dot.revealed { background: var(--teal-ll); }
@@ -146,17 +147,18 @@
 
     .clue-card {
       border-radius: 12px;
-      padding: 28px 28px;
-      border: 0.5px solid var(--border);
-      background: #fff;
-      min-height: 140px;
+      padding: 32px 36px;
+      border: none;
+      background: rgba(255,255,255,0.55);
+      min-height: 150px;
       display: flex;
       flex-direction: column;
       justify-content: center;
+      backdrop-filter: blur(2px);
     }
-    .clue-card.active-card { border-color: var(--teal-ll); border-left: 3px solid var(--teal); }
-    .clue-card.wrong-card { background: var(--pink); border-color: var(--pink-m); }
-    .clue-card.past-card { background: #fff; opacity: 0.85; }
+    .clue-card.active-card { background: rgba(255,255,255,0.65); border-left: 3px solid var(--teal); }
+    .clue-card.wrong-card { background: rgba(243,220,228,0.6); }
+    .clue-card.past-card { background: rgba(255,255,255,0.4); }
 
     .clue-tag {
       display: inline-block;
@@ -170,7 +172,7 @@
     }
     .active-card .clue-tag { background: var(--teal-l); color: var(--teal-d); }
     .wrong-card .clue-tag { background: var(--pirouette); color: var(--rose-d); }
-    .past-card .clue-tag { background: #f0ede8; color: #888; }
+    .past-card .clue-tag { background: rgba(240,237,232,0.8); color: #888; }
 
     .clue-body {
       font-size: 22px;
@@ -187,7 +189,7 @@
       margin-bottom: 16px;
     }
     .nav-btn {
-      background: transparent;
+      background: rgba(255,255,255,0.4);
       border: 0.5px solid var(--border);
       border-radius: 6px;
       padding: 6px 12px;
@@ -198,7 +200,7 @@
       cursor: pointer;
       transition: all 0.2s;
     }
-    .nav-btn:hover { background: #f0ede8; }
+    .nav-btn:hover { background: rgba(255,255,255,0.7); }
     .nav-btn:disabled { opacity: 0.3; cursor: default; }
     .nav-hint { font-size: 10px; letter-spacing: 0.1em; color: var(--muted); font-family: var(--sc); font-style: italic; }
 
@@ -222,12 +224,12 @@
       font-family: var(--serif);
       font-size: 15px;
       font-weight: 300;
-      background: #fff;
+      background: rgba(255,255,255,0.7);
       color: var(--ink);
       outline: none;
       transition: border-color 0.2s;
     }
-    .guess-input:focus { border-color: var(--teal); }
+    .guess-input:focus { border-color: var(--teal); background: rgba(255,255,255,0.9); }
     .guess-input::placeholder { color: #ccc; font-style: italic; }
 
     .guess-btn {
@@ -249,7 +251,7 @@
       position: absolute;
       top: calc(100% + 4px);
       left: 0; right: 0;
-      background: #fff;
+      background: rgba(255,255,255,0.95);
       border: 0.5px solid var(--border);
       border-radius: 8px;
       z-index: 20;
@@ -284,8 +286,8 @@
       text-align: center;
       margin-top: 4px;
     }
-    .result-banner.win { background: var(--jade-l); border: 0.5px solid var(--teal-ll); }
-    .result-banner.lose { background: var(--pink); border: 0.5px solid var(--pink-m); }
+    .result-banner.win { background: rgba(224,245,238,0.7); }
+    .result-banner.lose { background: rgba(243,220,228,0.6); }
     .rb-label { font-size: 10px; letter-spacing: 0.2em; font-family: var(--sc); font-weight: 300; margin-bottom: 8px; }
     .result-banner.win .rb-label { color: var(--jade); }
     .result-banner.lose .rb-label { color: var(--rose-d); }
@@ -296,7 +298,7 @@
       display: block;
       width: 100%;
       margin-top: 12px;
-      background: transparent;
+      background: rgba(255,255,255,0.4);
       border: 0.5px solid var(--teal);
       border-radius: 8px;
       padding: 11px;
@@ -307,7 +309,7 @@
       cursor: pointer;
       transition: all 0.2s;
     }
-    .bonus-btn:hover { background: var(--teal-l); }
+    .bonus-btn:hover { background: rgba(225,245,238,0.7); }
 
     .elea-overlay {
       display: none;
@@ -327,8 +329,8 @@
     .elea-close { margin-top: 28px; background: rgba(255,255,255,0.12); border: 0.5px solid rgba(255,255,255,0.3); border-radius: 8px; padding: 11px 32px; color: #fff; font-family: var(--sc); font-size: 11px; letter-spacing: 0.14em; cursor: pointer; }
 
     @media (max-width: 480px) {
-      body { padding: 0; }
-      .app { border-radius: 0; border: none; min-height: 100vh; max-width: 100%; }
+      body { padding: 16px; }
+      .app { max-width: 100%; }
     }
   </style>
 </head>
