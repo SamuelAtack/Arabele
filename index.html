@@ -442,10 +442,7 @@ async function signIn() {
 
 async function signOut() {
   await _sb.auth.signOut();
-  _user = null;
-  _streak = { current_streak: 0, longest_streak: 0, last_played: null };
-  renderAuthBar();
-  renderStreak();
+  // signOut triggers onAuthStateChange with null session, which handles the UI
 }
 
 async function loadStreak() {
@@ -488,6 +485,9 @@ function renderAuthBar() {
 
 _sb.auth.onAuthStateChange(async (event, session) => {
   _user = session?.user ?? null;
+  if (!_user) {
+    _streak = { current_streak: 0, longest_streak: 0, last_played: null };
+  }
   renderAuthBar();
   if (_user) await loadStreak();
   else renderStreak();
@@ -614,6 +614,7 @@ const D=[
   {n:"Amandine Albisson",c:[{t:"Origine",x:"Née à Clermont-Ferrand en 1987"},{t:"À l'Opéra de Paris",x:"Danseuse étoile depuis 2013"},{t:"Nommée étoile",x:"Nommée en 2013 par Benjamin Millepied"},{t:"Rôle emblématique",x:"Paquita, Roméo et Juliette, La Bayadère"},{t:"Indice final",x:"Grande technicienne au style classique affirmé, elle excelle dans le grand répertoire"}]},
   {n:"Étoile Mathias Heymann",c:[{t:"Origine",x:"Né à Paris en 1987"},{t:"À l'Opéra de Paris",x:"Danseur étoile depuis 2009"},{t:"Nommé étoile",x:"Nommé en 2009 à 22 ans"},{t:"Rôle emblématique",x:"Casse-Noisette, Le Lac des Cygnes, Don Quichotte"},{t:"Indice final",x:"Virtuose explosif, il éblouit dans les grands rôles classiques par sa technique et son énergie"}]},
   {n:"Valentine Colasante",c:[{t:"Origine",x:"Née à Nice en 1990"},{t:"À l'Opéra de Paris",x:"Danseuse étoile depuis 2018"},{t:"Nommée étoile",x:"Nommée en 2018 par Aurélie Dupont"},{t:"Rôle emblématique",x:"In the Middle, La Bayadère, Giselle"},{t:"Indice final",x:"Danseuse au tempérament fort et à la technique brillante, très appréciée dans le contemporain"}]},
+  {n:"Guillaume Diop",c:[{t:"Origine",x:"Né à Paris en 2000"},{t:"À l'Opéra de Paris",x:"Danseur étoile depuis 2022"},{t:"Nommé étoile",x:"Nommé en 2022 à seulement 22 ans par Aurélie Dupont"},{t:"Rôle emblématique",x:"Le Lac des Cygnes, La Belle au Bois Dormant, Roméo et Juliette"},{t:"Indice final",x:"L'un des plus jeunes étoiles de l'histoire de l'Opéra de Paris, au style noble et au charisme naturel"}]},
   {n:"Hugo Marchand",c:[{t:"Origine",x:"Né à Bordeaux en 1994"},{t:"À l'Opéra de Paris",x:"Danseur étoile depuis 2017"},{t:"Nommé étoile",x:"Nommé en 2017 après Le Lac des Cygnes"},{t:"Rôle emblématique",x:"Le Lac des Cygnes, Roméo et Juliette, La Belle au Bois Dormant"},{t:"Indice final",x:"Grand danseur au physique imposant et au lyrisme naturel, figure montante du Ballet de l'Opéra"}]},
   {n:"Léonore Baulac",c:[{t:"Origine",x:"Née à Paris en 1992"},{t:"À l'Opéra de Paris",x:"Danseuse étoile depuis 2017"},{t:"Nommée étoile",x:"Nommée en 2017 après Giselle"},{t:"Rôle emblématique",x:"Giselle, La Sylphide, Manon"},{t:"Indice final",x:"Danseuse d'une grande sensibilité romantique, elle donne vie avec poésie aux héroïnes du XIXe siècle"}]},
   {n:"François Alu",c:[{t:"Origine",x:"Né en France en 1991"},{t:"À l'Opéra de Paris",x:"Danseur étoile depuis 2017"},{t:"Nommé étoile",x:"Nommé en 2017 en clôture de Don Quichotte"},{t:"Rôle emblématique",x:"Don Quichotte, Casse-Noisette, Spartacus"},{t:"Indice final",x:"Virtuose exceptionnel aux sauts et pirouettes spectaculaires, surnommé le roi des manèges"}]},
