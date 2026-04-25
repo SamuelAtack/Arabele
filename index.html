@@ -6,6 +6,7 @@
   <title>Arabele</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Cormorant+SC:wght@300;400&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
 
@@ -69,7 +70,7 @@
       line-height:1;
     }
     .logo-teal{color:var(--teal-m)}
-    .logo-ghost{color:var(--teal-m);opacity:0.18;font-style:italic}
+    .logo-ghost{color:var(--teal-m);opacity:0.09;font-style:italic}
     .tagline{
       margin-top:8px;
       font-size:11px;
@@ -247,6 +248,50 @@
       .clue{padding:28px 24px}
       .logo{font-size:34px}
     }
+
+    /* ── AUTH BAR ── */
+    .auth-bar{
+      position:fixed;top:0;left:0;right:0;height:52px;
+      display:flex;align-items:center;justify-content:flex-end;
+      padding:0 24px;z-index:10;
+    }
+    .auth-btn{
+      font-family:var(--sc);font-size:10px;letter-spacing:0.16em;
+      background:none;border:1px solid var(--border);
+      padding:7px 16px;cursor:pointer;color:var(--teal);
+      transition:all .2s;
+    }
+    .auth-btn:hover{background:var(--teal-ll);border-color:var(--teal-l)}
+
+    .user-info{
+      display:flex;align-items:center;gap:12px;
+    }
+    .user-name{
+      font-family:var(--sc);font-size:10px;letter-spacing:0.12em;
+      color:var(--muted);
+    }
+    .sign-out{
+      font-family:var(--sc);font-size:9px;letter-spacing:0.14em;
+      background:none;border:none;cursor:pointer;color:var(--muted);
+      padding:0;transition:color .2s;
+    }
+    .sign-out:hover{color:var(--teal)}
+
+    /* ── STREAK DISPLAY ── */
+    .streak-row{
+      display:flex;align-items:center;justify-content:center;
+      gap:20px;margin-top:10px;margin-bottom:2px;
+    }
+    .streak-block{text-align:center}
+    .streak-num{
+      font-family:var(--sc);font-size:26px;font-weight:300;
+      color:var(--teal);line-height:1;
+    }
+    .streak-label{
+      font-family:var(--sc);font-size:8px;letter-spacing:0.2em;
+      color:var(--muted);margin-top:3px;
+    }
+    .streak-divider{width:1px;height:32px;background:var(--border)}
   </style>
 </head>
 <body>
@@ -344,12 +389,28 @@
   <button class="elea-x" onclick="document.getElementById('elea').classList.remove('on')">Fermer</button>
 </div>
 
+<!-- AUTH BAR -->
+<div class="auth-bar" id="authBar">
+  <button class="auth-btn" id="authBtn" onclick="signIn()">Se connecter</button>
+</div>
+
 <!-- APP -->
 <div class="app">
   <div class="header">
     <div class="logo">Arab<span class="logo-teal">e</span>l<span class="logo-teal">e</span><span class="logo-ghost">a</span></div>
-    <div class="tagline"><span class="tagline-t">E</span>légance · <span class="tagline-t">D</span>anse · <span class="tagline-t">F</span>inesse</div>
+    <div class="tagline"><span class="tagline-t">E</span>légance · <span class="tagline-t">D</span>anse · <span class="tagline-t">F</span>leury</div>
     <span class="date" id="datePill"></span>
+    <div class="streak-row" id="streakRow" style="display:none">
+      <div class="streak-block">
+        <div class="streak-num" id="curStreak">0</div>
+        <div class="streak-label">Série</div>
+      </div>
+      <div class="streak-divider"></div>
+      <div class="streak-block">
+        <div class="streak-num" id="maxStreak">0</div>
+        <div class="streak-label">Record</div>
+      </div>
+    </div>
   </div>
 
   <div class="rule"></div>
@@ -363,6 +424,89 @@
 </div>
 
 <script>
+// ── SUPABASE ──
+const _sb = supabase.createClient(
+  'https://qkgaqcopmwclwsdtyudm.supabase.co',
+  'sb_publishable_iPM3nydrGlEz_lNNgYn3Pw_8l2VoCmC'
+);
+
+let _user = null;
+let _streak = { current_streak: 0, longest_streak: 0, last_played: null };
+
+async function signIn() {
+  await _sb.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: 'https://arabele.vercel.app' }
+  });
+}
+
+async function signOut() {
+  await _sb.auth.signOut();
+  _user = null;
+  _streak = { current_streak: 0, longest_streak: 0, last_played: null };
+  renderAuthBar();
+  document.getElementById('streakRow').style.display = 'none';
+}
+
+async function loadStreak() {
+  if (!_user) return;
+  const { data } = await _sb.from('streaks').select('*').eq('user_id', _user.id).single();
+  if (data) _streak = data;
+  renderStreak();
+}
+
+async function saveStreak(won) {
+  if (!_user) return;
+  const today = new Date().toISOString().slice(0, 10);
+  if (_streak.last_played === today) return; // already played today
+
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+  let cur = won
+    ? (_streak.last_played === yesterday ? _streak.current_streak + 1 : 1)
+    : 0;
+  let best = Math.max(cur, _streak.longest_streak || 0);
+
+  const payload = {
+    user_id: _user.id,
+    current_streak: cur,
+    longest_streak: best,
+    last_played: today
+  };
+
+  await _sb.from('streaks').upsert(payload, { onConflict: 'user_id' });
+  _streak = { ..._streak, ...payload };
+  renderStreak();
+}
+
+function renderStreak() {
+  const row = document.getElementById('streakRow');
+  if (!_user) { row.style.display = 'none'; return; }
+  row.style.display = 'flex';
+  document.getElementById('curStreak').textContent = _streak.current_streak || 0;
+  document.getElementById('maxStreak').textContent = _streak.longest_streak || 0;
+}
+
+function renderAuthBar() {
+  const bar = document.getElementById('authBar');
+  if (_user) {
+    const name = _user.user_metadata?.name?.split(' ')[0] || 'Vous';
+    bar.innerHTML = `<div class="user-info">
+      <span class="user-name">${name}</span>
+      <button class="sign-out" onclick="signOut()">Déconnexion</button>
+    </div>`;
+  } else {
+    bar.innerHTML = `<button class="auth-btn" onclick="signIn()">Se connecter</button>`;
+  }
+}
+
+// Listen for auth state changes (handles redirect back from Google)
+_sb.auth.onAuthStateChange(async (event, session) => {
+  _user = session?.user ?? null;
+  renderAuthBar();
+  await loadStreak();
+});
+
+// ── DATA ──
 const B=[
   {n:"Le Lac des Cygnes",c:[{t:"Origine",x:"Russie · compositeur russe"},{t:"Époque",x:"Créé en 1877"},{t:"Chorégraphie",x:"Petipa & Lev Ivanov"},{t:"Synopsis",x:"Une jeune femme ensorcelée prend la forme d'un oiseau à la nuit tombée"},{t:"Indice final",x:"Un prince tombe amoureux d'Odette, ensorcelée par le maléfique Von Rothbart"}]},
   {n:"Giselle",c:[{t:"Origine",x:"France · compositeur franco-allemand"},{t:"Époque",x:"Créé en 1841"},{t:"Chorégraphie",x:"Jean Coralli & Jules Perrot"},{t:"Synopsis",x:"Une paysanne meurt de chagrin après avoir été trahie par son amant"},{t:"Indice final",x:"Giselle, devenue Wili, protège Albrecht des esprits vengeurs des jeunes filles mortes"}]},
@@ -386,6 +530,7 @@ const D=[
   {n:"Aurélie Dupont",c:[{t:"Origine",x:"Née en France"},{t:"Compagnie",x:"Opéra National de Paris"},{t:"Direction",x:"Directrice de la danse de l'Opéra de Paris depuis 2016"},{t:"Fait marquant",x:"Nommée étoile en 1998, reconnue pour son élégance naturelle"},{t:"Indice final",x:"A incarné Manon, Giselle et Juliette parmi ses rôles les plus célébrés à l'Opéra de Paris"}]},
 ];
 
+// ── GAME STATE ──
 let mode='ballet',vi={ballet:0,dancer:0};
 const st={ballet:{ci:0,g:[],done:false,won:false},dancer:{ci:0,g:[],done:false,won:false}};
 
@@ -398,11 +543,18 @@ const norm=v=>v.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').re
 function setMode(m,el){mode=m;document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));el.classList.add('on');render();}
 function slide(d){const ss=s();vi[mode]=Math.max(0,Math.min(ss.ci,vi[mode]+d));track();nav();}
 
-function submit(){
+async function submit(){
   const i=document.getElementById('gi');const v=i.value.trim();if(!v)return;
   const ss=s();const item=it();
-  if(norm(v)===norm(item.n)){ss.done=true;ss.won=true;}
-  else{ss.g.push(v);if(ss.ci<4)ss.ci++;else{ss.done=true;ss.won=false;}vi[mode]=ss.ci;}
+  if(norm(v)===norm(item.n)){
+    ss.done=true;ss.won=true;
+    await saveStreak(true);
+  } else {
+    ss.g.push(v);
+    if(ss.ci<4) ss.ci++;
+    else { ss.done=true; ss.won=false; await saveStreak(false); }
+    vi[mode]=ss.ci;
+  }
   i.value='';hsug();render();
 }
 
