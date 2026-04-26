@@ -630,7 +630,23 @@ const st={ballet:{ci:0,g:[],done:false,won:false},dancer:{ci:0,g:[],done:false,w
 
 const todayLabel=()=>new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long'});
 const dIdx=a=>{const d=new Date();return Math.floor((d-new Date(d.getFullYear(),0,0))/86400000)%a.length;};
-const it=()=>mode==='ballet'?B[dIdx(B)]:D[dIdx(D)];
+
+// Date overrides -- force specific puzzles on specific dates
+const BALLET_OVERRIDES = { '2026-04-26': 'Notre-Dame de Paris' };
+const DANCER_OVERRIDES = { '2026-04-26': 'Guillaume Diop' };
+
+const it=()=>{
+  const dateKey = new Date().toISOString().slice(0,10);
+  if(mode==='ballet'){
+    const override = BALLET_OVERRIDES[dateKey];
+    if(override){ const found=B.find(b=>b.n===override); if(found)return found; }
+    return B[dIdx(B)];
+  } else {
+    const override = DANCER_OVERRIDES[dateKey];
+    if(override){ const found=D.find(d=>d.n===override); if(found)return found; }
+    return D[dIdx(D)];
+  }
+};
 const s=()=>st[mode];
 const norm=v=>v.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9\s]/g,'').trim();
 
