@@ -442,7 +442,13 @@ async function signIn() {
 }
 
 async function signOut() {
-  await _sb.auth.signOut();
+  const { error } = await _sb.auth.signOut();
+  if (!error) {
+    _user = null;
+    _streak = { current_streak: 0, longest_streak: 0, last_played: null };
+    renderAuthBar();
+    renderStreak();
+  }
 }
 
 async function loadStreak() {
@@ -450,13 +456,12 @@ async function loadStreak() {
   const { data } = await _sb.from('streaks').select('*').eq('user_id', _user.id).single();
   if (data) _streak = data;
   renderStreak();
-  render(); // re-render so streak numbers appear in header
 }
 
 async function saveStreak() {
   if (!_user) return;
   const todayStr = new Date().toISOString().slice(0, 10);
-  if (_streak.last_played === todayStr) return;
+  if (_streak.last_played === todayStr) { renderStreak(); return; }
   const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
   const cur = (_streak.last_played === yesterday ? (_streak.current_streak || 0) + 1 : 1);
   const best = Math.max(cur, _streak.longest_streak || 0);
@@ -464,7 +469,6 @@ async function saveStreak() {
   await _sb.from('streaks').upsert(payload, { onConflict: 'user_id' });
   _streak = { ..._streak, ...payload };
   renderStreak();
-  render(); // re-render so streak shows immediately after game ends
 }
 
 async function giveStreakToAll() {
@@ -477,10 +481,13 @@ async function giveStreakToAll() {
 
 function renderStreak() {
   const row = document.getElementById('streakRow');
+  const cur = document.getElementById('curStreak');
+  const max = document.getElementById('maxStreak');
+  if (!row || !cur || !max) return;
   if (!_user) { row.style.display = 'none'; return; }
   row.style.display = 'flex';
-  document.getElementById('curStreak').textContent = _streak.current_streak || 0;
-  document.getElementById('maxStreak').textContent = _streak.longest_streak || 0;
+  cur.textContent = _streak.current_streak || 0;
+  max.textContent = _streak.longest_streak || 0;
 }
 
 function renderAuthBar() {
@@ -494,11 +501,12 @@ function renderAuthBar() {
 }
 
 _sb.auth.onAuthStateChange(async (event, session) => {
+  if (event === 'SIGNED_OUT') return; // handled by signOut() directly
   _user = session?.user ?? null;
-  if (!_user) { _streak = { current_streak: 0, longest_streak: 0, last_played: null }; }
-  renderAuthBar();
-  if (_user) await loadStreak();
-  else renderStreak();
+  if (_user) {
+    renderAuthBar();
+    await loadStreak();
+  }
 });
 
 // ── BALLETS (100) ──
